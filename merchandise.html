@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZAVE - Merchandise</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Hero Section (no animation) */
+        .merch-hero {
+            background: radial-gradient(ellipse at 70% 30%, #2a0a10, #0B0B0B);
+            color: white;
+            padding: 8rem 1.5rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .merch-hero-title {
+            font-size: 4rem;
+            font-weight: 900;
+            letter-spacing: -0.025em;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+        @media (min-width: 768px) {
+            .merch-hero-title {
+                font-size: 6rem;
+            }
+        }
+        .merch-hero-subtitle {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Product Grid */
+        .merch-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem;
+            display: grid;
+            gap: 3rem;
+            grid-template-columns: 1fr;
+        }
+        @media (min-width: 768px) {
+            .merch-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (min-width: 1024px) {
+            .merch-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        .merch-card {
+            background: #181818;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+        .merch-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.5);
+        }
+        .merch-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: #690011;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            z-index: 2;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .merch-image-container {
+            background: #0B0B0B;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+            position: relative;
+        }
+        .merch-carousel {
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        .merch-track {
+            display: flex;
+            transition: transform 0.5s ease-out;
+            width: 200%;
+        }
+        .merch-slide {
+            width: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .merch-image {
+            width: 100%;
+            height: auto;
+            max-height: 300px;
+            object-fit: contain;
+        }
+        .merch-carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            border-radius: 50%;
+            padding: 0.5rem;
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+            z-index: 5;
+        }
+        .merch-carousel-btn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .merch-carousel-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        .merch-carousel-btn-left {
+            left: 0.5rem;
+        }
+        .merch-carousel-btn-right {
+            right: 0.5rem;
+        }
+        .merch-nav {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem;
+            z-index: 5;
+        }
+        .merch-dot {
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            transition: background 0.3s;
+        }
+        .merch-dot.active {
+            background: white;
+        }
+        .merch-info {
+            padding: 1.5rem;
+            color: white;
+        }
+        .merch-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .merch-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #690011;
+            margin-bottom: 1rem;
+        }
+        .btn-add-cart {
+            width: 100%;
+            background: #690011;
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-add-cart:hover {
+            background: #4A000D;
+        }
+
+        /* CTA Banner with scrolling pattern placed higher (top) */
+        .merch-cta {
+            background: #690011;
+            color: white;
+            padding: 6rem 1.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .merch-cta-scroll {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            opacity: 0.12;
+            font-size: 8rem;
+            font-weight: 900;
+            white-space: nowrap;
+            animation: scrollLimited 20s linear infinite;
+            letter-spacing: 0.05em;
+            pointer-events: none;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            line-height: 1;
+        }
+        @keyframes scrollLimited {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+        .merch-cta-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+        .merch-cta-text {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            z-index: 2;
+        }
+        .btn-cta {
+            background: white;
+            color: #690011;
+            padding: 0.75rem 2rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            z-index: 2;
+        }
+        .btn-cta:hover {
+            background: #f3f4f6;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="index.html" style="text-decoration: none; color: inherit;">
+                <div class="logo">ZAVE</div>
+            </a>
+            <div class="nav-right">
+                <button class="btn-account">My Account</button>
+                <button class="hamburger" id="hamburgerBtn">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-content">
+            <button class="sidebar-close" id="sidebarClose">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <div class="sidebar-logo">ZAVE</div>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="sidebar-link">MAIN PAGE</a>
+                <a href="about.html" class="sidebar-link">About studio</a>
+                <a href="index.html#membership" class="sidebar-link">Memberships</a>
+                <a href="merchandise.html" class="sidebar-link">Merchandise</a>
+                <a href="index.html#contact" class="sidebar-link-small">Contact Us</a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Hero Section (no animation) -->
+    <section class="merch-hero">
+        <h1 class="merch-hero-title">SHOP ZAVE</h1>
+        <p class="merch-hero-subtitle">Exclusive merchandise for the ZAVE community — gear that moves with you.</p>
+    </section>
+
+    <!-- Product Grid (unchanged) -->
+    <div class="merch-grid">
+        <!-- ZAVE Pulse Hoodie -->
+        <div class="merch-card">
+            <div class="merch-badge">BESTSELLER</div>
+            <div class="merch-image-container">
+                <div class="merch-carousel" data-carousel="hoodie">
+                    <div class="merch-track">
+                        <div class="merch-slide">
+                            <img src="hoodie-front.png" alt="ZAVE pulse hoodie front" class="merch-image">
+                        </div>
+                        <div class="merch-slide">
+                            <img src="hoodie-back.png" alt="ZAVE pulse hoodie back" class="merch-image">
+                        </div>
+                    </div>
+                    <button class="merch-carousel-btn merch-carousel-btn-left" data-carousel-prev>‹</button>
+                    <button class="merch-carousel-btn merch-carousel-btn-right" data-carousel-next>›</button>
+                    <div class="merch-nav">
+                        <button class="merch-dot active" data-index="0"></button>
+                        <button class="merch-dot" data-index="1"></button>
+                    </div>
+                </div>
+            </div>
+            <div class="merch-info">
+                <h3 class="merch-name">ZAVE pulse hoodie</h3>
+                <p class="merch-price">$60.00</p>
+                <button class="btn-add-cart">ADD TO CART</button>
+            </div>
+        </div>
+
+        <!-- ZAVE Distressed Cap -->
+        <div class="merch-card">
+            <div class="merch-image-container">
+                <img src="cap.png" alt="ZAVE distressed cap" class="merch-image">
+            </div>
+            <div class="merch-info">
+                <h3 class="merch-name">ZAVE distressed cap</h3>
+                <p class="merch-price">$35.00</p>
+                <button class="btn-add-cart">ADD TO CART</button>
+            </div>
+        </div>
+
+        <!-- ZAVE Artists T-Shirt -->
+        <div class="merch-card">
+            <div class="merch-badge">NEW</div>
+            <div class="merch-image-container">
+                <div class="merch-carousel" data-carousel="shirt">
+                    <div class="merch-track">
+                        <div class="merch-slide">
+                            <img src="shirt-front.png" alt="ZAVE artists tshirt front" class="merch-image">
+                        </div>
+                        <div class="merch-slide">
+                            <img src="shirt-back.png" alt="ZAVE artists tshirt back" class="merch-image">
+                        </div>
+                    </div>
+                    <button class="merch-carousel-btn merch-carousel-btn-left" data-carousel-prev>‹</button>
+                    <button class="merch-carousel-btn merch-carousel-btn-right" data-carousel-next>›</button>
+                    <div class="merch-nav">
+                        <button class="merch-dot active" data-index="0"></button>
+                        <button class="merch-dot" data-index="1"></button>
+                    </div>
+                </div>
+            </div>
+            <div class="merch-info">
+                <h3 class="merch-name">ZAVE artists tshirt</h3>
+                <p class="merch-price">$45.00</p>
+                <button class="btn-add-cart">ADD TO CART</button>
+            </div>
+        </div>
+
+        <!-- ZAVE Leather Jacket -->
+        <div class="merch-card">
+            <div class="merch-badge">LIMITED</div>
+            <div class="merch-image-container">
+                <div class="merch-carousel" data-carousel="jacket">
+                    <div class="merch-track">
+                        <div class="merch-slide">
+                            <img src="jacket-front.png" alt="ZAVE leather jacket front" class="merch-image">
+                        </div>
+                        <div class="merch-slide">
+                            <img src="jacket-back.png" alt="ZAVE leather jacket back" class="merch-image">
+                        </div>
+                    </div>
+                    <button class="merch-carousel-btn merch-carousel-btn-left" data-carousel-prev>‹</button>
+                    <button class="merch-carousel-btn merch-carousel-btn-right" data-carousel-next>›</button>
+                    <div class="merch-nav">
+                        <button class="merch-dot active" data-index="0"></button>
+                        <button class="merch-dot" data-index="1"></button>
+                    </div>
+                </div>
+            </div>
+            <div class="merch-info">
+                <h3 class="merch-name">ZAVE leather jacket</h3>
+                <p class="merch-price">$89.99</p>
+                <button class="btn-add-cart">ADD TO CART</button>
+            </div>
+        </div>
+
+        <!-- ZAVE Duffel Bag -->
+        <div class="merch-card">
+            <div class="merch-image-container">
+                <img src="bag.png" alt="ZAVE duffel bag" class="merch-image">
+            </div>
+            <div class="merch-info">
+                <h3 class="merch-name">ZAVE duffel bag</h3>
+                <p class="merch-price">$50.00</p>
+                <button class="btn-add-cart">ADD TO CART</button>
+            </div>
+        </div>
+
+        <!-- ZAVE Branded Stickers -->
+        <div class="merch-card">
+            <div class="merch-image-container">
+                <img src="sticker.png" alt="ZAVE branded stickers" class="merch-image">
+            </div>
+            <div class="merch-info">
+                <h3 class="merch-name">ZAVE branded stickers</h3>
+                <p class="merch-price">$8.00</p>
+                <button class="btn-add-cart">ADD TO CART</button>
+            </div>
+        </div>
+
+        <!-- ZAVE Water Bottle -->
+        <div class="merch-card">
+            <div class="merch-image-container">
+                <img src="bottle.png" alt="ZAVE water bottle" class="merch-image">
+            </div>
+            <div class="merch-info">
+                <h3 class="merch-name">ZAVE water bottle</h3>
+                <p class="merch-price">$25.00</p>
+                <button class="btn-add-cart">ADD TO CART</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Banner with scrolling "ZAVE LIMITED" placed higher (top) -->
+    <section class="merch-cta">
+        <div class="merch-cta-scroll">
+            ZAVE LIMITED&nbsp;&nbsp;&nbsp;ZAVE LIMITED&nbsp;&nbsp;&nbsp;ZAVE LIMITED&nbsp;&nbsp;&nbsp;
+            ZAVE LIMITED&nbsp;&nbsp;&nbsp;ZAVE LIMITED&nbsp;&nbsp;&nbsp;ZAVE LIMITED&nbsp;&nbsp;&nbsp;
+        </div>
+        <h2 class="merch-cta-title">MEMBERS EXCLUSIVE</h2>
+        <p class="merch-cta-text">Get early access to new drops and special discounts. Join the ZAVE community today.</p>
+        <a href="index.html#membership" class="btn-cta">BECOME A MEMBER</a>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-logo-section">
+                <div class="logo">ZAVE</div>
+            </div>
+            <div class="footer-info">
+                <div class="footer-title">MOVE IT. FEEL IT ZAVE IT.</div>
+                <p class="footer-text">ZAVE is not a studio in the classic sense. It's a community where everyone finds their rhythm, their style, and their stage.</p>
+            </div>
+            <div class="footer-contact">
+                <div class="footer-email">support@zavecorp.com</div>
+                <div class="footer-phones">
+                    <div>JP +81 6-2225-5561</div>
+                    <div>BLR +375 29 222-55-61</div>
+                    <div>KR +82 2-2225-5561</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Carousel initialization
+        document.querySelectorAll('.merch-carousel').forEach(carousel => {
+            const track = carousel.querySelector('.merch-track');
+            const prevBtn = carousel.querySelector('[data-carousel-prev]');
+            const nextBtn = carousel.querySelector('[data-carousel-next]');
+            const dots = carousel.querySelectorAll('.merch-dot');
+            let currentSlide = 0;
+            const totalSlides = dots.length;
+
+            function updateCarousel() {
+                track.style.transform = `translateX(-${currentSlide * 50}%)`;
+                dots.forEach((dot, idx) => {
+                    dot.classList.toggle('active', idx === currentSlide);
+                });
+                if (prevBtn) prevBtn.disabled = currentSlide === 0;
+                if (nextBtn) nextBtn.disabled = currentSlide === totalSlides - 1;
+            }
+
+            if (prevBtn) {
+                prevBtn.addEventListener('click', () => {
+                    if (currentSlide > 0) {
+                        currentSlide--;
+                        updateCarousel();
+                    }
+                });
+            }
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => {
+                    if (currentSlide < totalSlides - 1) {
+                        currentSlide++;
+                        updateCarousel();
+                    }
+                });
+            }
+            dots.forEach((dot, idx) => {
+                dot.addEventListener('click', () => {
+                    currentSlide = idx;
+                    updateCarousel();
+                });
+            });
+            updateCarousel();
+        });
+
+        // Add to cart
+        document.querySelectorAll('.btn-add-cart').forEach(btn => {
+            btn.addEventListener('click', () => {
+                alert('Item added to cart!');
+            });
+        });
+    </script>
+</body>
+</html>
